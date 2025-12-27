@@ -1,18 +1,25 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 from database import db, init_db, Admin
 
 app = Flask(__name__)
 app.secret_key = "hospital_secret_key"
 
+# Initialize database
 init_db(app)
 
-# ---------------- LOGIN ----------------
+
+# ---------------- ROUTES ---------------- #
+
+@app.route("/")
+def index():
+    return redirect("/login")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get("username").strip()
-        password = request.form.get("password").strip()
+        username = request.form["username"]
+        password = request.form["password"]
 
         admin = Admin.query.filter_by(
             username=username,
@@ -20,15 +27,13 @@ def login():
         ).first()
 
         if admin:
-            session["admin"] = username
+            session["admin"] = admin.username
             return redirect("/home")
         else:
             return "Invalid credentials"
 
     return render_template("login.html")
 
-
-# ---------------- HOME ----------------
 
 @app.route("/home")
 def home():
@@ -37,13 +42,13 @@ def home():
     return render_template("home.html")
 
 
-# ---------------- LOGOUT ----------------
-
 @app.route("/logout")
 def logout():
-    session.clear()
+    session.pop("admin", None)
     return redirect("/login")
 
+
+# ---------------- RUN ---------------- #
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
