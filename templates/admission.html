@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Patient Admission</h2>
+<form method="post">
+<input name="patient_id" placeholder="Patient ID">
+<input type="date" name="admit_date">
+<input type="date" name="discharge_date">
+<button>Submit</button>
+</form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="form-box">
+    <h2>🩺 Update Discharge Date</h2>
+
+    <form method="post">
+        <input name="admit_id" placeholder="Admission ID" required>
+        <input type="date" name="discharge_date" required>
+        <button>Update Discharge</button>
+    </form>
+</div>
+
+{% endblock %}
