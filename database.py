@@ -3,16 +3,10 @@ import os
 
 db = SQLAlchemy()
 
-# ---------------------------
-# Initialize Database
-# ---------------------------
 def init_db(app):
-    # Ensure instance folder exists (important on Render)
-    instance_path = os.path.join(os.getcwd(), "instance")
-    os.makedirs(instance_path, exist_ok=True)
-
-    # SQLite database path
-    db_path = os.path.join(instance_path, "hospital.db")
+    # SQLite database (works on Render)
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+    db_path = os.path.join(base_dir, "hospital.db")
 
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -21,30 +15,22 @@ def init_db(app):
 
     with app.app_context():
         db.create_all()
+        create_default_admin()
 
 
-# ---------------------------
-# Database Models
-# ---------------------------
+# ---------------- MODELS ----------------
 
-class Patient(db.Model):
+class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    age = db.Column(db.Integer)
-    gender = db.Column(db.String(10))
-    contact = db.Column(db.String(20))
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
 
 
-class Staff(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    role = db.Column(db.String(50))
-    contact = db.Column(db.String(20))
-
-
-class Admission(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    patient_id = db.Column(db.Integer)
-    ward = db.Column(db.String(50))
-    admit_date = db.Column(db.String(20))
-    discharge_date = db.Column(db.String(20))
+def create_default_admin():
+    # Create admin user if not exists
+    if not Admin.query.filter_by(username="admin").first():
+        admin = Admin(username="admin", password="admin123")
+        sneha = Admin(username="sneha", password="sneha@123")
+        db.session.add(admin)
+        db.session.add(sneha)
+        db.session.commit()
