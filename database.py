@@ -12,27 +12,32 @@ def init_db(app):
         db.create_all()
 
 
+# ---------------- MODELS ---------------- #
+
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True)
-    password = db.Column(db.String(50))
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(50), nullable=False)
 
 
 class Patient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    age = db.Column(db.Integer)
-    disease = db.Column(db.String(100))
+    name = db.Column(db.String(100), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    gender = db.Column(db.String(10), nullable=False)
+    disease = db.Column(db.String(100), nullable=False)
+    contact = db.Column(db.String(15), nullable=False)
 
 
 class Staff(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    role = db.Column(db.String(100))
+    name = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(100), nullable=False)
+    contact = db.Column(db.String(15), nullable=False)
 
 
 class Admission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    patient_name = db.Column(db.String(100))
-    ward = db.Column(db.String(50))
-    discharged = db.Column(db.Boolean, default=False)
+    patient_name = db.Column(db.String(100), nullable=False)
+    ward = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(20), default="Admitted")

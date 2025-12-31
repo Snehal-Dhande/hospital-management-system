@@ -6,9 +6,10 @@ app.secret_key = "hospital_secret_key"
 
 init_db(app)
 
-# ---------------- AUTH ---------------- #
 
-@app.route("/")
+# ---------------- LOGIN ---------------- #
+
+@app.route("/", methods=["GET"])
 def index():
     return redirect("/login")
 
@@ -16,14 +17,15 @@ def index():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        admin = Admin.query.filter_by(
-            username=request.form["username"],
-            password=request.form["password"]
-        ).first()
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        admin = Admin.query.filter_by(username=username, password=password).first()
 
         if admin:
             session["admin"] = admin.username
             return redirect("/home")
+
         return "Invalid credentials"
 
     return render_template("login.html")
@@ -31,9 +33,11 @@ def login():
 
 @app.route("/logout")
 def logout():
-    session.clear()
+    session.pop("admin", None)
     return redirect("/login")
 
+
+# ---------------- HOME ---------------- #
 
 @app.route("/home")
 def home():
@@ -41,15 +45,18 @@ def home():
         return redirect("/login")
     return render_template("home.html")
 
+
 # ---------------- PATIENT ---------------- #
 
 @app.route("/add_patient", methods=["GET", "POST"])
 def add_patient():
     if request.method == "POST":
         patient = Patient(
-            name=request.form["name"],
-            age=request.form["age"],
-            disease=request.form["disease"]
+            name=request.form.get("name"),
+            age=request.form.get("age"),
+            gender=request.form.get("gender"),
+            disease=request.form.get("disease"),
+            contact=request.form.get("contact"),
         )
         db.session.add(patient)
         db.session.commit()
@@ -68,10 +75,10 @@ def view_patients():
 def search_patient():
     patient = None
     if request.method == "POST":
-        patient = Patient.query.filter_by(
-            name=request.form["name"]
-        ).first()
+        name = request.form.get("name")
+        patient = Patient.query.filter_by(name=name).first()
     return render_template("search_patient.html", patient=patient)
+
 
 # ---------------- STAFF ---------------- #
 
@@ -79,8 +86,9 @@ def search_patient():
 def add_staff():
     if request.method == "POST":
         staff = Staff(
-            name=request.form["name"],
-            role=request.form["role"]
+            name=request.form.get("name"),
+            role=request.form.get("role"),
+            contact=request.form.get("contact"),
         )
         db.session.add(staff)
         db.session.commit()
@@ -94,24 +102,25 @@ def view_staff():
     staff = Staff.query.all()
     return render_template("view_staff.html", staff=staff)
 
+
 # ---------------- ADMISSION ---------------- #
 
 @app.route("/admission", methods=["GET", "POST"])
 def admission():
     if request.method == "POST":
         admission = Admission(
-            patient_name=request.form["patient_name"],
-            ward=request.form["ward"]
+            patient_name=request.form.get("patient_name"),
+            ward=request.form.get("ward"),
         )
         db.session.add(admission)
         db.session.commit()
-        return redirect("/admissions")
+        return redirect("/view_admission")
 
     return render_template("admission.html")
 
 
-@app.route("/admissions")
-def admissions():
+@app.route("/view_admission")
+def view_admission():
     admissions = Admission.query.all()
     return render_template("view_admission.html", admissions=admissions)
 
@@ -119,13 +128,16 @@ def admissions():
 @app.route("/update_discharge", methods=["GET", "POST"])
 def update_discharge():
     if request.method == "POST":
-        admission = Admission.query.get(request.form["id"])
+        pid = request.form.get("id")
+        admission = Admission.query.get(pid)
         if admission:
-            admission.discharged = True
+            admission.status = "Discharged"
             db.session.commit()
     return render_template("update_discharge.html")
+
 
 # ---------------- RUN ---------------- #
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
+
