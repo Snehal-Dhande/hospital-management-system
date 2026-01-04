@@ -20,15 +20,16 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        admin = Admin.query.filter_by(username=username, password=password).first()
-
-        if admin:
-            session["admin"] = admin.username
+        # ✅ hardcoded credentials
+        if username == "admin" and password == "admin123":
+            session["user"] = username
             return redirect("/home")
-
-        return "Invalid credentials"
+        else:
+            return "Invalid credentials"
 
     return render_template("login.html")
+
+
 
 
 @app.route("/logout")
@@ -51,15 +52,28 @@ def home():
 @app.route("/add_patient", methods=["GET", "POST"])
 def add_patient():
     if request.method == "POST":
+        name = request.form.get("name")
+        age = request.form.get("age")
+        gender = request.form.get("gender")
+        disease = request.form.get("disease")
+        contact = request.form.get("contact")
+
+        if not all([name, age, gender, disease, contact]):
+            return "All fields are required"
+
         patient = Patient(
-            name=request.form.get("name"),
-            age=request.form.get("age"),
-            gender=request.form.get("gender"),
-            disease=request.form.get("disease"),
-            contact=request.form.get("contact"),
+            name=name,
+            age=int(age),
+            gender=gender,
+            disease=disease,
+            contact=contact
         )
+
         db.session.add(patient)
         db.session.commit()
+
+        print("Patient added:", name)  # for Render logs
+
         return redirect("/view_patients")
 
     return render_template("add_patient.html")
@@ -74,10 +88,14 @@ def view_patients():
 @app.route("/search_patient", methods=["GET", "POST"])
 def search_patient():
     patient = None
+
     if request.method == "POST":
-        name = request.form.get("name")
-        patient = Patient.query.filter_by(name=name).first()
+        patient_id = request.form.get("patient_id")
+        patient = Patient.query.get(patient_id)
+
     return render_template("search_patient.html", patient=patient)
+
+
 
 
 # ---------------- STAFF ---------------- #
@@ -85,13 +103,22 @@ def search_patient():
 @app.route("/add_staff", methods=["GET", "POST"])
 def add_staff():
     if request.method == "POST":
+        name = request.form.get("name")
+        role = request.form.get("role")
+        contact = request.form.get("contact")
+
+        if not name or not role or not contact:
+            return "All fields required"
+
         staff = Staff(
-            name=request.form.get("name"),
-            role=request.form.get("role"),
-            contact=request.form.get("contact"),
+            name=name,
+            role=role,
+            contact=contact
         )
+
         db.session.add(staff)
         db.session.commit()
+
         return redirect("/view_staff")
 
     return render_template("add_staff.html")
@@ -99,8 +126,8 @@ def add_staff():
 
 @app.route("/view_staff")
 def view_staff():
-    staff = Staff.query.all()
-    return render_template("view_staff.html", staff=staff)
+    staff_list = Staff.query.all()
+    return render_template("view_staff.html", staff_list=staff_list)
 
 
 # ---------------- ADMISSION ---------------- #
@@ -108,15 +135,27 @@ def view_staff():
 @app.route("/admission", methods=["GET", "POST"])
 def admission():
     if request.method == "POST":
-        admission = Admission(
-            patient_name=request.form.get("patient_name"),
-            ward=request.form.get("ward"),
-        )
-        db.session.add(admission)
-        db.session.commit()
-        return redirect("/view_admission")
+        try:
+            patient_id = request.form.get("patient_id")
+            room_no = request.form.get("room_no")
+            admit_date = request.form.get("admit_date")
+
+            admission = Admission(
+                patient_id=patient_id,
+                room_no=room_no,
+                admit_date=admit_date
+            )
+
+            db.session.add(admission)
+            db.session.commit()
+
+            return redirect("/admissions")
+
+        except Exception as e:
+            return f"Error occurred: {e}"
 
     return render_template("admission.html")
+
 
 
 @app.route("/view_admission")
@@ -127,13 +166,21 @@ def view_admission():
 
 @app.route("/update_discharge", methods=["GET", "POST"])
 def update_discharge():
+    message = ""
+
     if request.method == "POST":
-        pid = request.form.get("id")
-        admission = Admission.query.get(pid)
-        if admission:
-            admission.status = "Discharged"
+        patient_id = request.form.get("patient_id")
+
+        patient = Patient.query.get(patient_id)
+
+        if patient:
+            patient.discharged = True
             db.session.commit()
-    return render_template("update_discharge.html")
+            message = "Patient discharged successfully"
+        else:
+            message = "Patient not found"
+
+    return render_template("update_discharge.html", message=message)
 
 
 # ---------------- RUN ---------------- #

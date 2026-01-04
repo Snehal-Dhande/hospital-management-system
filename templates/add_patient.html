@@ -1,14 +1,15 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
 
 <h2>Add Patient</h2>
 
 <form method="post">
-    <input name="name" placeholder="Name" required>
-    <input name="age" type="number" placeholder="Age" required>
-    <input name="gender" placeholder="Gender" required>
-    <input name="disease" placeholder="Disease" required>
-    <input name="contact" placeholder="Contact" required>
+    <input type="text" name="name" placeholder="Patient Name" required><br>
+    <input type="number" name="age" placeholder="Age" required><br>
+    <input type="text" name="gender" placeholder="Gender" required><br>
+    <input type="text" name="disease" placeholder="Disease" required><br>
+    <input type="text" name="contact" placeholder="Contact" required><br>
+
     <button type="submit">Add Patient</button>
 </form>
 

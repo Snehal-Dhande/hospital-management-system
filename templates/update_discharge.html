@@ -1,14 +1,13 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
 
-<div class="form-box">
-    <h2>🩺 Update Discharge Date</h2>
+<h2>Update Discharge</h2>
 
-    <form method="post">
-        <input name="admit_id" placeholder="Admission ID" required>
-        <input type="date" name="discharge_date" required>
-        <button>Update Discharge</button>
-    </form>
-</div>
+<form method="POST">
+    <input type="number" name="patient_id" placeholder="Enter Patient ID" required>
+    <button type="submit">Discharge</button>
+</form>
+
+<p>{{ message }}</p>
 
 {% endblock %}

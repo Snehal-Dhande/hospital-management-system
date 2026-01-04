@@ -1,12 +1,25 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
+
 <h2>Staff List</h2>
+
 <table>
-<tr><th>ID</th><th>Name</th><th>Role</th><th>Contact</th></tr>
-{% for s in staff %}
-<tr>
-<td>{{s[0]}}</td><td>{{s[1]}}</td><td>{{s[2]}}</td><td>{{s[3]}}</td>
-</tr>
-{% endfor %}
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Contact</th>
+    </tr>
+
+    {% for staff in staff_list %}
+    <tr>
+        <td>{{ staff.id }}</td>
+        <td>{{ staff.name }}</td>
+        <td>{{ staff.role }}</td>
+        <td>{{ staff.contact }}</td>
+    </tr>
+    {% endfor %}
+
 </table>
+
 {% endblock %}

@@ -1,14 +1,28 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
+
 <h2>Patients List</h2>
-<table>
-<tr>
-<th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Disease</th>
-</tr>
-{% for p in patients %}
-<tr>
-<td>{{p[0]}}</td><td>{{p[1]}}</td><td>{{p[2]}}</td><td>{{p[3]}}</td><td>{{p[4]}}</td>
-</tr>
-{% endfor %}
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Disease</th>
+        <th>Contact</th>
+    </tr>
+
+    {% for patient in patients %}
+    <tr>
+        <td>{{ patient.id }}</td>
+        <td>{{ patient.name }}</td>
+        <td>{{ patient.age }}</td>
+        <td>{{ patient.gender }}</td>
+        <td>{{ patient.disease }}</td>
+        <td>{{ patient.contact }}</td>
+    </tr>
+    {% endfor %}
 </table>
+
 {% endblock %}

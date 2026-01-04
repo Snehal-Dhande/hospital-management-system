@@ -1,28 +1,22 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
 
-<div class="form-box">
-    <h2>🔍 Search Patient</h2>
+<h2>Search Patient</h2>
 
-    <form method="post">
-        <input name="patient_id" placeholder="Enter Patient ID" required>
-        <button>Search</button>
-    </form>
+<form method="POST">
+    <input type="number" name="patient_id" placeholder="Enter Patient ID" required>
+    <button type="submit">Search</button>
+</form>
 
-    {% if patient %}
-    <table>
-        <tr>
-            <th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Disease</th>
-        </tr>
-        <tr>
-            <td>{{patient[0]}}</td>
-            <td>{{patient[1]}}</td>
-            <td>{{patient[2]}}</td>
-            <td>{{patient[3]}}</td>
-            <td>{{patient[4]}}</td>
-        </tr>
-    </table>
-    {% endif %}
-</div>
+{% if patient %}
+<hr>
+<h3>Patient Details</h3>
+<p><b>ID:</b> {{ patient.id }}</p>
+<p><b>Name:</b> {{ patient.name }}</p>
+<p><b>Age:</b> {{ patient.age }}</p>
+<p><b>Gender:</b> {{ patient.gender }}</p>
+<p><b>Disease:</b> {{ patient.disease }}</p>
+<p><b>Contact:</b> {{ patient.contact }}</p>
+{% endif %}
 
 {% endblock %}
