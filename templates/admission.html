@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Admission</h2>
+<h2>Patient Admission</h2>
 
-<form method="POST" action="/admission">
-    <input type="number" name="patient_id" placeholder="Patient ID" required><br><br>
-    <input type="text" name="room_no" placeholder="Room Number" required><br><br>
-    <input type="date" name="admit_date" required><br><br>
+<form method="POST">
+    <select name="patient_id" required>
+        {% for p in patients %}
+        <option value="{{ p.id }}">{{ p.name }}</option>
+        {% endfor %}
+    </select>
+
+    <input name="ward" placeholder="Ward" required>
+    <input name="bed_no" placeholder="Bed No" required>
+    <input type="date" name="admit_date" required>
 
     <button type="submit">Admit Patient</button>
 </form>

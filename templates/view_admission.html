@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Admissions List</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Patient Name</th>
+        <th>Ward</th>
+        <th>Bed No</th>
+        <th>Admit Date</th>
+        <th>Discharge Date</th>
+    </tr>
+
+    {% for a in admissions %}
+    <tr>
+        <td>{{ a.id }}</td>
+        <td>{{ a.patient.name }}</td>
+        <td>{{ a.ward }}</td>
+        <td>{{ a.bed_no }}</td>
+        <td>{{ a.admit_date }}</td>
+        <td>{{ a.discharge_date or "Not Discharged" }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

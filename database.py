@@ -38,6 +38,11 @@ class Staff(db.Model):
 
 class Admission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    patient_name = db.Column(db.String(100), nullable=False)
-    ward = db.Column(db.String(50), nullable=False)
-    status = db.Column(db.String(20), default="Admitted")
+
+    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'))
+    patient = db.relationship('Patient', backref='admissions')
+
+    ward = db.Column(db.String(50))
+    bed_no = db.Column(db.String(20))
+    admit_date = db.Column(db.String(20))
+    discharge_date = db.Column(db.String(20), nullable=True)

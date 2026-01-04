@@ -134,27 +134,23 @@ def view_staff():
 
 @app.route("/admission", methods=["GET", "POST"])
 def admission():
+    patients = Patient.query.all()
+
     if request.method == "POST":
-        try:
-            patient_id = request.form.get("patient_id")
-            room_no = request.form.get("room_no")
-            admit_date = request.form.get("admit_date")
+        admission = Admission(
+            patient_id=request.form["patient_id"],
+            ward=request.form["ward"],
+            bed_no=request.form["bed_no"],
+            admit_date=request.form["admit_date"]
+        )
 
-            admission = Admission(
-                patient_id=patient_id,
-                room_no=room_no,
-                admit_date=admit_date
-            )
+        db.session.add(admission)
+        db.session.commit()
 
-            db.session.add(admission)
-            db.session.commit()
+        return redirect("/view_admission")
 
-            return redirect("/admissions")
+    return render_template("admission.html", patients=patients)
 
-        except Exception as e:
-            return f"Error occurred: {e}"
-
-    return render_template("admission.html")
 
 
 
@@ -162,6 +158,9 @@ def admission():
 def view_admission():
     admissions = Admission.query.all()
     return render_template("view_admission.html", admissions=admissions)
+
+
+
 
 
 @app.route("/update_discharge", methods=["GET", "POST"])
