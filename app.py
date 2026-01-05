@@ -155,25 +155,27 @@ def admission():
     db = get_connection()
     cur = db.cursor()
 
+    # Fetch ONLY patients
+    cur.execute("SELECT patient_id, name FROM patients")
+    patients = cur.fetchall()
+
     if request.method == 'POST':
         patient_id = request.form['patient_id']
         admit_date = request.form['admit_date']
         discharge_date = request.form['discharge_date']
 
         cur.execute(
-            "INSERT INTO admission (patient_id, admit_date, discharge_date) VALUES (%s,%s,%s)",
+            "INSERT INTO admission (patient_id, admit_date, discharge_date) VALUES (%s, %s, %s)",
             (patient_id, admit_date, discharge_date)
         )
         db.commit()
         db.close()
+
         return redirect('/view_admission')
 
-    # GET request → fetch patients
-    cur.execute("SELECT patient_id, name FROM patients")
-    patients = cur.fetchall()
     db.close()
-
     return render_template('admission.html', patients=patients)
+
 
 
 
