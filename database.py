@@ -2,6 +2,17 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+import mysql.connector
+
+def get_connection():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="root",
+        database="hospital_db"
+    )
+
+
 
 def init_db(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///hospital.db"
@@ -38,11 +49,6 @@ class Staff(db.Model):
 
 class Admission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-
-    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'))
-    patient = db.relationship('Patient', backref='admissions')
-
-    ward = db.Column(db.String(50))
-    bed_no = db.Column(db.String(20))
-    admit_date = db.Column(db.String(20))
-    discharge_date = db.Column(db.String(20), nullable=True)
+    patient_id = db.Column(db.Integer, nullable=False)
+    bed = db.Column(db.String(50), nullable=False)
+    admit_date = db.Column(db.String(20), nullable=False)

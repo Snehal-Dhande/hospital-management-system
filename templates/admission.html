@@ -1,20 +1,39 @@
 {% extends "base.html" %}
+
 {% block content %}
+<div class="page-container">
+    <h2 class="page-title">Patient Admission</h2>
 
-<h2>Patient Admission</h2>
+    <div class="form-card">
+        <form method="POST" action="/admission">
 
-<form method="POST">
-    <select name="patient_id" required>
-        {% for p in patients %}
-        <option value="{{ p.id }}">{{ p.name }}</option>
-        {% endfor %}
-    </select>
+            <!-- Patient Dropdown -->
+            <select name="patient_id" class="form-input" required>
+                <option value="">Select Patient</option>
+                {% for patient in patients %}
+                    <option value="{{ patient[0] }}">{{ patient[1] }}</option>
+                {% endfor %}
+            </select>
 
-    <input name="ward" placeholder="Ward" required>
-    <input name="bed_no" placeholder="Bed No" required>
-    <input type="date" name="admit_date" required>
+            <!-- Admit Date -->
+            <input
+                type="date"
+                name="admit_date"
+                class="form-input"
+                required
+            >
 
-    <button type="submit">Admit Patient</button>
-</form>
+            <!-- Discharge Date -->
+            <input
+                type="date"
+                name="discharge_date"
+                class="form-input"
+            >
 
+            <button type="submit" class="btn-primary">
+                Admit Patient
+            </button>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -1,22 +1,15 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
 
-<h2>Search Patient</h2>
+<div class="page-container">
+    <div class="page-title">Search Patient</div>
 
-<form method="POST">
-    <input type="number" name="patient_id" placeholder="Enter Patient ID" required>
-    <button type="submit">Search</button>
-</form>
-
-{% if patient %}
-<hr>
-<h3>Patient Details</h3>
-<p><b>ID:</b> {{ patient.id }}</p>
-<p><b>Name:</b> {{ patient.name }}</p>
-<p><b>Age:</b> {{ patient.age }}</p>
-<p><b>Gender:</b> {{ patient.gender }}</p>
-<p><b>Disease:</b> {{ patient.disease }}</p>
-<p><b>Contact:</b> {{ patient.contact }}</p>
-{% endif %}
+    <div class="form-box">
+        <form method="post">
+            <input type="text" name="name" placeholder="Enter Patient Name" required>
+            <button class="primary-btn">Search</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

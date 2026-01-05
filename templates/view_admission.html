@@ -1,28 +1,30 @@
 {% extends "base.html" %}
+
 {% block content %}
+<div class="page-container">
+    <h2 class="page-title">Admissions List</h2>
 
-<h2>Admissions List</h2>
-
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Patient Name</th>
-        <th>Ward</th>
-        <th>Bed No</th>
-        <th>Admit Date</th>
-        <th>Discharge Date</th>
-    </tr>
-
-    {% for a in admissions %}
-    <tr>
-        <td>{{ a.id }}</td>
-        <td>{{ a.patient.name }}</td>
-        <td>{{ a.ward }}</td>
-        <td>{{ a.bed_no }}</td>
-        <td>{{ a.admit_date }}</td>
-        <td>{{ a.discharge_date or "Not Discharged" }}</td>
-    </tr>
-    {% endfor %}
-</table>
-
+    <div class="table-card">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Admit Date</th>
+                    <th>Discharge Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in admissions %}
+                <tr>
+                    <td>{{ a[0] }}</td>
+                    <td>{{ a[1] }}</td>
+                    <td>{{ a[2] }}</td>
+                    <td>{{ a[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

@@ -1,16 +1,52 @@
-{% extends "base.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Patient</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 
-<h2>Add Patient</h2>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="/home">Home</a>
+        <a href="/add_patient">Add Patient</a>
+        <a href="/view_patients">View Patients</a>
+        <a href="/add_staff">Add Staff</a>
+        <a href="/view_staff">View Staff</a>
+        <a href="/admission">Admission</a>
+        <a href="/view_admission">Admissions</a>
+    </nav>
 
-<form method="post">
-    <input type="text" name="name" placeholder="Patient Name" required><br>
-    <input type="number" name="age" placeholder="Age" required><br>
-    <input type="text" name="gender" placeholder="Gender" required><br>
-    <input type="text" name="disease" placeholder="Disease" required><br>
-    <input type="text" name="contact" placeholder="Contact" required><br>
+    <!-- Page Title -->
+    <h2 class="page-title">Add Patient</h2>
 
-    <button type="submit">Add Patient</button>
-</form>
+    <!-- Form Card -->
+    <div class="form-container">
+        <form method="POST" action="/add_patient">
 
-{% endblock %}
+            <!-- IMPORTANT: name attributes MUST match app.py -->
+            <input type="text" name="name" placeholder="Patient Name" required>
+
+            <input type="number" name="age" placeholder="Age" required>
+
+            <input type="text" name="gender" placeholder="Gender" required>
+
+            <input type="text" name="disease" placeholder="Disease" required>
+
+            <input type="text" name="contact" placeholder="Contact" required>
+
+            <button type="submit" class="btn-primary">Add Patient</button>
+
+        </form>
+    </div>
+
+    <!-- Bottom Links -->
+    <div class="bottom-links">
+        <a href="/search_patient">Search Patient</a>
+        <a href="/update_discharge">Update Discharge</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+</body>
+</html>
